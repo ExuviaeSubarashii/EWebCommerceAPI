@@ -1,3 +1,5 @@
+using Commerce.Domain.Models;
+
 namespace EWebCommerceAPI
 {
     public class Program
@@ -9,6 +11,7 @@ namespace EWebCommerceAPI
             // Add services to the container.
 
             builder.Services.AddControllers();
+            builder.Services.AddSingleton<CommerceContext>();
 
             builder.Services.AddCors(options =>
             {

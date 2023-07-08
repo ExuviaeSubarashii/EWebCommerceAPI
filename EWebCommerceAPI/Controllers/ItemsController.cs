@@ -14,6 +14,7 @@ namespace EWebCommerceAPI.Controllers
             _CC = CC;
         }
         [HttpGet]
+        [Route("GetAllItems")]
         public JsonResult GetAllItems()
         {
             return new JsonResult(_CC.Items.ToList());

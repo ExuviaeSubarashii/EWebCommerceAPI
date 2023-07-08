@@ -14,9 +14,10 @@ namespace EWebCommerceAPI.Controllers
             _CC = CC;
         }
         [HttpPost]
-        public ActionResult Login(string? userEmail,string? password)
+        [Route("Login")]
+        public ActionResult Login(string userEmail,string userPassword)
         {
-            var userCheckInQuery=_CC.Users.Where(x=>x.UserEmail == userEmail.Trim()&&x.Password.Trim()==password).FirstOrDefault();
+            var userCheckInQuery = _CC.Users.Where(x => x.UserEmail == userEmail.Trim() && x.Password.Trim() == userPassword).FirstOrDefault();
             if (userCheckInQuery != null) { return Ok(); }
             else
             {
@@ -24,16 +25,17 @@ namespace EWebCommerceAPI.Controllers
             }
         }
         [HttpPost]
-        public ActionResult Register(string? userEmail, string userName,string? password) 
+        [Route("Register")]
+        public ActionResult Register(string? userEmail, string? userName,string? userPassword) 
         {
-            var userCheckInQuery = _CC.Users.Where(x => x.UserEmail == userEmail.Trim() && x.Password.Trim() == password&&x.UserName==userName.Trim()).FirstOrDefault();
+            var userCheckInQuery = _CC.Users.Where(x => x.UserEmail == userEmail.Trim() && x.Password.Trim() == userPassword && x.UserName==userName.Trim()).FirstOrDefault();
             if (userCheckInQuery==null)
             {
                 User user= new User()
                 {
                     UserName = userName,
                     UserEmail = userEmail,
-                    Password = password,
+                    Password = userPassword,
                     CreationDate = DateTime.Now,
                 };  
                 _CC.Users.Add(user);
