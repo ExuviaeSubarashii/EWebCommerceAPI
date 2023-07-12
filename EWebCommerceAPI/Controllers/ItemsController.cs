@@ -19,11 +19,11 @@ namespace EWebCommerceAPI.Controllers
         {
             return new JsonResult(_CC.Items.ToList());
         }
-        [HttpPost]
+        [HttpGet]
         [Route("GetSpecificItem")]
-        public JsonResult GetItems(int id)
+        public JsonResult GetItems(string itemName)
         {
-           return new JsonResult(_CC.Items.Where(x=>x.ItemId == id).ToList());
+           return new JsonResult(_CC.Items.Where(x=>x.ItemName==itemName).ToList());
         }
         [HttpPost]
         [Route("AddNewItem")]
