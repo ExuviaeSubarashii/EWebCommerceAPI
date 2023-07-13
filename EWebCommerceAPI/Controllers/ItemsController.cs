@@ -26,6 +26,13 @@ namespace EWebCommerceAPI.Controllers
            return new JsonResult(_CC.Items.Where(x=>x.ItemName==itemName).ToList());
         }
         [HttpPost]
+        [Route("SaveCartList")]
+        public ActionResult SaveCartList(string itemName,int itemAmount,int itemTotalPrice)
+        {
+
+            return Ok();
+        }
+        [HttpPost]
         [Route("AddNewItem")]
         public async Task<ActionResult> AddNewItem(string itemName, int? itemPrice, string itemPriceTag, string? itemImage)
         {
