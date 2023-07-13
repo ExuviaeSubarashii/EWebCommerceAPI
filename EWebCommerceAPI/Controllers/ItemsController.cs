@@ -1,6 +1,7 @@
 ﻿using Commerce.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace EWebCommerceAPI.Controllers
 {
@@ -27,11 +28,30 @@ namespace EWebCommerceAPI.Controllers
         }
         [HttpPost]
         [Route("SaveCartList")]
-        public ActionResult SaveCartList(string itemName,int itemAmount,int itemTotalPrice)
+        public ActionResult SaveCartList(string ordererName,string itemNames, string itemAmounts, string totalPrice)
         {
+            // Process the received itemNames, itemAmounts, and totalPrice as needed
 
+            // Example: Split the comma-separated strings into arrays
+            string[] itemNameArray = itemNames.Split(',');
+
+            string[] itemCountArray = itemAmounts.Split(',');
+            for (int i = 0; i < itemNameArray.Length; i++)
+            {
+                Orders newOrder = new Orders()
+                {
+                    ItemName = itemNameArray[i],
+                    ItemAmount = itemCountArray[i],
+                    OrderDate = DateTime.Now,
+                    OrdererName = ordererName,
+                    TotalPrice = totalPrice
+                };
+                _CC.Orders.Add(newOrder);
+                _CC.SaveChanges();
+            }
             return Ok();
         }
+
         [HttpPost]
         [Route("AddNewItem")]
         public async Task<ActionResult> AddNewItem(string itemName, int? itemPrice, string itemPriceTag, string? itemImage)

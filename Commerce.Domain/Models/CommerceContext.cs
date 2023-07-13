@@ -19,6 +19,7 @@ namespace Commerce.Domain.Models
         public virtual DbSet<Item> Items { get; set; } = null!;
         public virtual DbSet<SoldItem> SoldItems { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
+        public virtual DbSet<Orders> Orders { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -89,6 +90,34 @@ namespace Commerce.Domain.Models
 
                 entity.Property(e => e.UserName)
                     .HasMaxLength(25)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+            });
+            modelBuilder.Entity<Orders>(entity =>
+            {
+
+                entity.HasKey(e => e.OrderId);
+
+                entity.Property(e => e.OrdererName)
+                    .HasMaxLength(25)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.OrderDate)
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.ItemName)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ItemAmount)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.TotalPrice)
+                    .HasMaxLength(10)
                     .IsUnicode(false)
                     .IsFixedLength();
             });
