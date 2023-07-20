@@ -74,5 +74,11 @@ namespace EWebCommerceAPI.Controllers
                 return BadRequest();
             }
         }
+        [HttpGet]
+        [Route("GetMyOrders")]
+        public JsonResult GetMyOrders(string userName)
+        {
+            return new JsonResult(_CC.Orders.Where(x => x.OrdererName == userName).ToList());
+        }
     }
 }
