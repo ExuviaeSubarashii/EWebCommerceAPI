@@ -24,11 +24,11 @@ namespace EWebCommerceAPI.Controllers
         [Route("GetSpecificItem")]
         public JsonResult GetItems(string itemName)
         {
-           return new JsonResult(_CC.Items.Where(x=>x.ItemName==itemName).ToList());
+            return new JsonResult(_CC.Items.Where(x => x.ItemName == itemName).ToList());
         }
         [HttpPost]
         [Route("SaveCartList")]
-        public ActionResult SaveCartList(string ordererName,string itemNames, string itemAmounts, string totalPrice)
+        public ActionResult SaveCartList(string ordererName, string itemNames, string itemAmounts, string totalPrice)
         {
             // Process the received itemNames, itemAmounts, and totalPrice as needed
 
@@ -46,6 +46,11 @@ namespace EWebCommerceAPI.Controllers
                     OrdererName = ordererName,
                     TotalPrice = totalPrice
                 };
+
+                var itemStockQuery = _CC.Items.Where(x => x.ItemName == itemNameArray[i]).FirstOrDefault();
+
+                itemStockQuery.ItemStock = itemStockQuery.ItemStock - Convert.ToInt32(itemCountArray[i]);
+
                 _CC.Orders.Add(newOrder);
                 _CC.SaveChanges();
             }

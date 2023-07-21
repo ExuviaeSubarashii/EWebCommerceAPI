@@ -48,6 +48,10 @@ namespace Commerce.Domain.Models
                     .HasMaxLength(3)
                     .IsUnicode(false)
                     .IsFixedLength();
+                entity.Property(e => e.ItemStock)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .IsFixedLength();
             });
 
             modelBuilder.Entity<SoldItem>(entity =>
