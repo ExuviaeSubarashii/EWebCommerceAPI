@@ -41,7 +41,7 @@ namespace EWebCommerceAPI.Controllers
             if (CheckIfCardExists)
             {
                 string[] itemNameArray = orderRequest.ItemNames.Split(',');
-                string[] itemCountArray = orderRequest.ItemAmounts.Split();
+                string[] itemCountArray = orderRequest.ItemAmounts.Split(',');
 
                 for (int i = 0; i < itemNameArray.Length; i++)
                 {
