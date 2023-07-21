@@ -1,4 +1,5 @@
-﻿using Commerce.Domain.Models;
+﻿using Commerce.Domain.Dtos;
+using Commerce.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace EWebCommerceAPI.Controllers
     public class ItemsController : ControllerBase
     {
         private readonly CommerceContext _CC;
+       
         public ItemsController(CommerceContext CC)
         {
             _CC = CC;
@@ -28,34 +30,46 @@ namespace EWebCommerceAPI.Controllers
         }
         [HttpPost]
         [Route("SaveCartList")]
-        public ActionResult SaveCartList(string ordererName, string itemNames, string itemAmounts, string totalPrice)
+        public IActionResult SaveCartList([FromBody] OrderRequest orderRequest)
         {
-            // Process the received itemNames, itemAmounts, and totalPrice as needed
+            var CheckIfCardExists = _CC.PaymentInformations.Select(x =>
+                x.CardNumber == orderRequest.CardNumber &&
+                x.ExpirationDate == orderRequest.ExpirationDate &&
+                x.SecurityCode == orderRequest.SecurityCode &&
+                x.PostalCode == orderRequest.PostalCode).FirstOrDefault();
 
-            // Example: Split the comma-separated strings into arrays
-            string[] itemNameArray = itemNames.Split(',');
-
-            string[] itemCountArray = itemAmounts.Split(',');
-            for (int i = 0; i < itemNameArray.Length; i++)
+            if (CheckIfCardExists)
             {
-                Orders newOrder = new Orders()
+                string[] itemNameArray = orderRequest.ItemNames.Split(',');
+                string[] itemCountArray = orderRequest.ItemAmounts.Split();
+
+                for (int i = 0; i < itemNameArray.Length; i++)
                 {
-                    ItemName = itemNameArray[i],
-                    ItemAmount = itemCountArray[i],
-                    OrderDate = DateTime.Now,
-                    OrdererName = ordererName,
-                    TotalPrice = totalPrice
-                };
+                    Orders newOrder = new Orders()
+                    {
+                        ItemName = itemNameArray[i],
+                        ItemAmount = itemCountArray[i],
+                        OrderDate = DateTime.Now,
+                        OrdererName = orderRequest.OrdererName,
+                        TotalPrice = orderRequest.TotalPrice.ToString()
+                    };
 
-                var itemStockQuery = _CC.Items.Where(x => x.ItemName == itemNameArray[i]).FirstOrDefault();
+                    var itemStockQuery = _CC.Items.FirstOrDefault(x => x.ItemName == itemNameArray[i]);
 
-                itemStockQuery.ItemStock = itemStockQuery.ItemStock - Convert.ToInt32(itemCountArray[i]);
+                    itemStockQuery.ItemStock = itemStockQuery.ItemStock - Convert.ToInt32(itemCountArray[i]);
 
-                _CC.Orders.Add(newOrder);
-                _CC.SaveChanges();
+                    _CC.Orders.Add(newOrder);
+                    _CC.SaveChanges();
+                }
+
+                return Ok();
             }
-            return Ok();
+            else
+            {
+                return NotFound();
+            }
         }
+
 
         [HttpPost]
         [Route("AddNewItem")]

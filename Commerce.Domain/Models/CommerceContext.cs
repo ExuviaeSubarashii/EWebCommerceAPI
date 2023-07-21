@@ -20,6 +20,7 @@ namespace Commerce.Domain.Models
         public virtual DbSet<SoldItem> SoldItems { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
         public virtual DbSet<Orders> Orders { get; set; } = null!;
+        public virtual DbSet<PaymentInformations> PaymentInformations { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -122,6 +123,31 @@ namespace Commerce.Domain.Models
 
                 entity.Property(e => e.TotalPrice)
                     .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+            });
+            modelBuilder.Entity<PaymentInformations>(entity =>
+            {
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.CardNumber)
+                    .HasMaxLength(16)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ExpirationDate)
+                    .HasMaxLength(4)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.SecurityCode)
+                    .HasMaxLength(3)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.PostalCode)
+                    .HasMaxLength(5)
                     .IsUnicode(false)
                     .IsFixedLength();
             });
