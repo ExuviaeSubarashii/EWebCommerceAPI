@@ -25,7 +25,7 @@ namespace EWebCommerceAPI.Controllers
         [HttpGet]
         [Route("GetSpecificItem")]
         public JsonResult GetItems(string itemName)
-        {
+        {   
             return new JsonResult(_CC.Items.Where(x => x.ItemName == itemName).ToList());
         }
         [HttpPost]
@@ -80,8 +80,8 @@ namespace EWebCommerceAPI.Controllers
                 Item newItem = new Item()
                 {
                     ItemName = itemName.Trim(),
-                    ItemImage = itemImage.Trim(),
                     ItemPrice = itemPrice,
+                    ItemImage = itemImage.Trim(),
                     ItemPriceTag = itemPriceTag.Trim()
                 };
                 _CC.Items.Add(newItem);
