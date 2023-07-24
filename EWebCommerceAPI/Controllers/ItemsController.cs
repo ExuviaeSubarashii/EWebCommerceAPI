@@ -24,9 +24,18 @@ namespace EWebCommerceAPI.Controllers
         }
         [HttpGet]
         [Route("GetSpecificItem")]
-        public JsonResult GetItems(string itemName)
-        {   
-            return new JsonResult(_CC.Items.Where(x => x.ItemName == itemName).ToList());
+        public JsonResult GetItems(string? itemName)
+        {
+            var resultQuery = _CC.Items.Where(x => x.ItemName == itemName).ToList();
+            if (resultQuery.Count > 0) 
+            {
+                return new JsonResult(resultQuery);
+            }
+            else if (itemName==null)
+            {
+                return new JsonResult(_CC.Items.ToList());
+            }
+            else { return new JsonResult(null); }
         }
         [HttpPost]
         [Route("SaveCartList")]
