@@ -53,6 +53,11 @@ namespace Commerce.Domain.Models
                     .HasMaxLength(10)
                     .IsUnicode(false)
                     .IsFixedLength();
+
+                entity.Property(e => e.SellerUser)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .IsFixedLength();
             });
 
             modelBuilder.Entity<SoldItem>(entity =>

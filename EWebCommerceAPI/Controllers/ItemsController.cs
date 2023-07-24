@@ -82,7 +82,7 @@ namespace EWebCommerceAPI.Controllers
 
         [HttpPost]
         [Route("AddNewItem")]
-        public async Task<ActionResult> AddNewItem(string itemName, int? itemPrice, string itemPriceTag, string? itemImage)
+        public async Task<ActionResult> AddNewItem(string userName,string itemName, int? itemPrice, string itemPriceTag, string? itemImage)
         {
             if (!string.IsNullOrEmpty(itemName) && itemPrice != null && !string.IsNullOrEmpty(itemPriceTag) && !string.IsNullOrEmpty(itemImage))
             {
@@ -91,11 +91,12 @@ namespace EWebCommerceAPI.Controllers
                     ItemName = itemName.Trim(),
                     ItemPrice = itemPrice,
                     ItemImage = itemImage.Trim(),
-                    ItemPriceTag = itemPriceTag.Trim()
+                    ItemPriceTag = itemPriceTag.Trim(),
+                    SellerUser = userName.Trim()
                 };
                 _CC.Items.Add(newItem);
                 _CC.SaveChanges();
-                return Ok();
+                return new JsonResult(_CC.Items.Where(x=>x.SellerUser==userName.Trim()));
             }
             else
             {
@@ -107,6 +108,13 @@ namespace EWebCommerceAPI.Controllers
         public JsonResult GetMyOrders(string userName)
         {
             return new JsonResult(_CC.Orders.Where(x => x.OrdererName == userName).ToList());
+        }
+        [HttpGet]
+        [Route("GetMyListings")]
+        public JsonResult GetMyListings(string userName)
+        {
+            return new JsonResult(_CC.Items.Where(x => x.SellerUser == userName.Trim()).ToList());
+
         }
     }
 }

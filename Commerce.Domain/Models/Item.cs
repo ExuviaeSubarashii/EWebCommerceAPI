@@ -11,5 +11,7 @@ namespace Commerce.Domain.Models
         public string? ItemPriceTag { get; set; }
         public string? ItemImage { get; set; }
         public int? ItemStock { get; set; }
+
+        public string? SellerUser { get; set; }
     }
 }
