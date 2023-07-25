@@ -14,5 +14,6 @@ namespace Commerce.Domain.Models
         public string? ItemName { get; set; }
         public string? ItemAmount { get; set; }
         public string? TotalPrice { get; set; }
+        public string? OrderGuid { get; set; }
     }
 }

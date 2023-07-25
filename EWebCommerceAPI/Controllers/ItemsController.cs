@@ -40,7 +40,7 @@ namespace EWebCommerceAPI.Controllers
         [HttpPost]
         [Route("SaveCartList")]
         public IActionResult SaveCartList([FromBody] OrderRequest orderRequest)
-        {
+            {
             var CheckIfCardExists = _CC.PaymentInformations.Select(x =>
                 x.CardNumber == orderRequest.CardNumber &&
                 x.ExpirationDate == orderRequest.ExpirationDate &&
@@ -51,6 +51,7 @@ namespace EWebCommerceAPI.Controllers
             {
                 string[] itemNameArray = orderRequest.ItemNames.Split(',');
                 string[] itemCountArray = orderRequest.ItemAmounts.Split(',');
+                string[] itemPriceArray=orderRequest.TotalPrice.Split(",");
 
                 for (int i = 0; i < itemNameArray.Length; i++)
                 {
@@ -60,7 +61,8 @@ namespace EWebCommerceAPI.Controllers
                         ItemAmount = itemCountArray[i],
                         OrderDate = DateTime.Now,
                         OrdererName = orderRequest.OrdererName,
-                        TotalPrice = orderRequest.TotalPrice.ToString()
+                        TotalPrice = itemPriceArray[i],
+                        OrderGuid = Guid.NewGuid().ToString(),
                     };
 
                     var itemStockQuery = _CC.Items.FirstOrDefault(x => x.ItemName == itemNameArray[i]);
@@ -108,6 +110,12 @@ namespace EWebCommerceAPI.Controllers
         public JsonResult GetMyOrders(string userName)
         {
             return new JsonResult(_CC.Orders.Where(x => x.OrdererName == userName).ToList());
+        }
+        [HttpGet]
+        [Route("GetMyOrdersByGuid")]
+        public JsonResult GetMyOrdersByGuid(string userName,string itemGuid)
+        {
+            return new JsonResult(_CC.Orders.Where(x => x.OrdererName == userName&&x.OrderGuid==itemGuid).ToList());
         }
         [HttpGet]
         [Route("GetMyListings")]

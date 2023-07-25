@@ -130,6 +130,10 @@ namespace Commerce.Domain.Models
                     .HasMaxLength(10)
                     .IsUnicode(false)
                     .IsFixedLength();
+                entity.Property(e => e.OrderGuid)
+                    .HasMaxLength(36)
+                    .IsUnicode(false)
+                    .IsFixedLength();
             });
             modelBuilder.Entity<PaymentInformations>(entity =>
             {
