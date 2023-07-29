@@ -27,13 +27,13 @@ namespace EWebCommerceAPI.Controllers
         public JsonResult GetItems(string? itemName)
         {
             var resultQuery = _CC.Items.Where(x => x.ItemName == itemName).ToList();
+            if (itemName == null)
+            {
+                return new JsonResult(_CC.Items.ToList());
+            }
             if (resultQuery.Count > 0) 
             {
                 return new JsonResult(resultQuery);
-            }
-            else if (itemName==null)
-            {
-                return new JsonResult(_CC.Items.ToList());
             }
             else { return new JsonResult(null); }
         }
@@ -84,21 +84,22 @@ namespace EWebCommerceAPI.Controllers
 
         [HttpPost]
         [Route("AddNewItem")]
-        public async Task<ActionResult> AddNewItem(string userName,string itemName, int? itemPrice, string itemPriceTag, string? itemImage)
+        public async Task<ActionResult> AddNewItem([FromBody] NewItemRequest NIT)
         {
-            if (!string.IsNullOrEmpty(itemName) && itemPrice != null && !string.IsNullOrEmpty(itemPriceTag) && !string.IsNullOrEmpty(itemImage))
+            if (!string.IsNullOrEmpty(NIT.itemName) && NIT.itemPrice != null)
             {
                 Item newItem = new Item()
                 {
-                    ItemName = itemName.Trim(),
-                    ItemPrice = itemPrice,
-                    ItemImage = itemImage.Trim(),
-                    ItemPriceTag = itemPriceTag.Trim(),
-                    SellerUser = userName.Trim()
+                    ItemName = NIT.itemName.Trim(),
+                    ItemPrice = NIT.itemPrice,
+                    //ItemImage = NIT.itemImage,
+                    ItemStock= NIT.itemStock,
+                    //ItemPriceTag="TRY",
+                    SellerUser = NIT.userName.Trim()
                 };
                 _CC.Items.Add(newItem);
                 _CC.SaveChanges();
-                return new JsonResult(_CC.Items.Where(x=>x.SellerUser==userName.Trim()));
+                return new JsonResult(_CC.Items.Where(x=>x.SellerUser==NIT.userName.Trim()));
             }
             else
             {
