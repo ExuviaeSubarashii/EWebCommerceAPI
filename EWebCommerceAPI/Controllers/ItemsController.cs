@@ -94,7 +94,7 @@ namespace EWebCommerceAPI.Controllers
                     ItemPrice = NIT.itemPrice,
                     //ItemImage = NIT.itemImage,
                     ItemStock= NIT.itemStock,
-                    //ItemPriceTag="TRY",
+                    ItemPriceTag="TRY",
                     SellerUser = NIT.userName.Trim()
                 };
                 _CC.Items.Add(newItem);
