@@ -23,6 +23,7 @@ namespace EWebCommerceAPI
                 });
             });
 
+
             var app = builder.Build();
             app.UseCors();
 

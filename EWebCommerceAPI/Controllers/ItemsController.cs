@@ -81,10 +81,10 @@ namespace EWebCommerceAPI.Controllers
             }
         }
 
-
+        [DisableRequestSizeLimit]
         [HttpPost]
         [Route("AddNewItem")]
-        public async Task<ActionResult> AddNewItem([FromBody] NewItemRequest NIT)
+        public async Task<ActionResult> AddNewItem([FromForm] NewItemRequest NIT)
         {
             if (!string.IsNullOrEmpty(NIT.itemName) && NIT.itemPrice != null)
             {
@@ -92,8 +92,9 @@ namespace EWebCommerceAPI.Controllers
                 {
                     ItemName = NIT.itemName.Trim(),
                     ItemPrice = NIT.itemPrice,
-                    //ItemImage = NIT.itemImage,
-                    ItemStock= NIT.itemStock,
+                    //install Microsoft.AspNetCore.Http.Features check NewItemRequest class for more info
+                    //ItemImage = NIT.itemImage.FileName,
+                    ItemStock = NIT.itemStock,
                     ItemPriceTag="TRY",
                     SellerUser = NIT.userName.Trim()
                 };
