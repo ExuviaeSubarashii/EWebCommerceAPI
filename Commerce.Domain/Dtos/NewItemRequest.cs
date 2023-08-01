@@ -13,8 +13,6 @@ namespace Commerce.Domain.Dtos
         public string? itemName { get; set; }
         public int? itemPrice { get; set; }
         public int? itemStock { get; set; }
-        //public IFormFile itemImage { get; set; }
-        //install Microsoft.AspNetCore.Http.Features
-        //public IFormFile itemImage { get; set; }
+        public IFormFile? itemImage { get; set; }
     }
 }

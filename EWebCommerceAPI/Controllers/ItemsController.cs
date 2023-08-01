@@ -3,6 +3,7 @@ using Commerce.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace EWebCommerceAPI.Controllers
 {
@@ -80,20 +81,21 @@ namespace EWebCommerceAPI.Controllers
                 return NotFound();
             }
         }
-
-        [DisableRequestSizeLimit]
+        
         [HttpPost]
         [Route("AddNewItem")]
         public async Task<ActionResult> AddNewItem([FromForm] NewItemRequest NIT)
         {
+            
             if (!string.IsNullOrEmpty(NIT.itemName) && NIT.itemPrice != null)
             {
+                
                 Item newItem = new Item()
                 {
                     ItemName = NIT.itemName.Trim(),
                     ItemPrice = NIT.itemPrice,
                     //install Microsoft.AspNetCore.Http.Features check NewItemRequest class for more info
-                    //ItemImage = NIT.itemImage.FileName,
+                    //ItemImage = NIT.itemImage,
                     ItemStock = NIT.itemStock,
                     ItemPriceTag="TRY",
                     SellerUser = NIT.userName.Trim()

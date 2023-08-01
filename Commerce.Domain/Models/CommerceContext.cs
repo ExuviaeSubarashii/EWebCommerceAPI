@@ -36,7 +36,7 @@ namespace Commerce.Domain.Models
             modelBuilder.Entity<Item>(entity =>
             {
                 entity.Property(e => e.ItemImage)
-                    .HasMaxLength(150)
+               .HasMaxLength(150)
                     .IsUnicode(false)
                     .IsFixedLength();
 
