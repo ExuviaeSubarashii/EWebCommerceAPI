@@ -86,7 +86,6 @@ namespace EWebCommerceAPI.Controllers
         [Route("AddNewItem")]
         public async Task<ActionResult> AddNewItem([FromForm] NewItemRequest NIT)
         {
-            
             if (!string.IsNullOrEmpty(NIT.itemName) && NIT.itemPrice != null)
             {
                 

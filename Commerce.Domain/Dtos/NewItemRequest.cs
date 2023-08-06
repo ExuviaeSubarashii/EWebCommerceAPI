@@ -13,6 +13,6 @@ namespace Commerce.Domain.Dtos
         public string? itemName { get; set; }
         public int? itemPrice { get; set; }
         public int? itemStock { get; set; }
-        public IFormFile? itemImage { get; set; }
+        //public IFormFile? itemImage { get; set; }
     }
 }
