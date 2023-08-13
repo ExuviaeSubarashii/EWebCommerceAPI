@@ -45,9 +45,10 @@ namespace EWebCommerceAPI.Controllers
         }
         [HttpPost]
         [Route("AddToWishList")]
-        public ActionResult AddToWishList(string userName, int wishId)
+        public ActionResult AddToWishList(string? userName, int? wishId)
         {
             if (wishId == null) { return BadRequest(); }
+
             var UserWishList = _CC.Users.Where(x => x.UserName == userName).FirstOrDefault();
             if (UserWishList.WishList.Length < 0)
             {
@@ -55,9 +56,21 @@ namespace EWebCommerceAPI.Controllers
             }
             else if (UserWishList.WishList.Contains(wishId.ToString()))
             {
-                var newWl = UserWishList.WishList.Split(',').ToList();
-                newWl.Remove(wishId.ToString());
-                UserWishList.WishList = string.Join(",", newWl);
+                string[] acceptedfriendRequest = null;
+                List<string> sw = new List<string>();
+
+                var query = _CC.Users.Where(x => x.UserName.Trim() == userName).FirstOrDefault();
+                var query2 = _CC.Users.Where(x => x.UserName == userName).ToList();
+                foreach (var item in query2)
+                {
+                    acceptedfriendRequest = item.WishList.Split(',');
+                }
+
+                List<String> list = acceptedfriendRequest.ToList();
+                list.Remove(wishId.ToString());
+                string[] columns = list.ToArray();
+                var newfriendList = string.Join(",", columns);
+                query.WishList = newfriendList;
                 _CC.SaveChanges();
                 return Ok();
             }
@@ -70,7 +83,6 @@ namespace EWebCommerceAPI.Controllers
         [Route("GetMyWishList")]
         public ActionResult GetMyWishList(string? userName)
         {
-            userName = "asd";
             List<Item> items = new List<Item>();
 
             var getUserWishes = _CC.Users.Where(x => x.UserName == userName).ToList();
@@ -85,7 +97,7 @@ namespace EWebCommerceAPI.Controllers
                     items.AddRange(fullwishes);
                 }
             }
-            return Ok(items.ToList());
+            return new JsonResult(items.ToList());
         }
         [HttpGet]
         [Route("DeleteFromWishlist")]
