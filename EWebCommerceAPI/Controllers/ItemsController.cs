@@ -1,9 +1,6 @@
 ﻿using Commerce.Domain.Dtos;
 using Commerce.Domain.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace EWebCommerceAPI.Controllers
 {
@@ -12,7 +9,7 @@ namespace EWebCommerceAPI.Controllers
     public class ItemsController : ControllerBase
     {
         private readonly CommerceContext _CC;
-       
+
         public ItemsController(CommerceContext CC)
         {
             _CC = CC;
@@ -32,7 +29,7 @@ namespace EWebCommerceAPI.Controllers
             {
                 return new JsonResult(_CC.Items.ToList());
             }
-            if (resultQuery.Count > 0) 
+            if (resultQuery.Count > 0)
             {
                 return new JsonResult(resultQuery);
             }
@@ -41,7 +38,7 @@ namespace EWebCommerceAPI.Controllers
         [HttpPost]
         [Route("SaveCartList")]
         public IActionResult SaveCartList([FromBody] OrderRequest orderRequest)
-            {
+        {
             var CheckIfCardExists = _CC.PaymentInformations.Select(x =>
                 x.CardNumber == orderRequest.CardNumber &&
                 x.ExpirationDate == orderRequest.ExpirationDate &&
@@ -52,7 +49,7 @@ namespace EWebCommerceAPI.Controllers
             {
                 string[] itemNameArray = orderRequest.ItemNames.Split(',');
                 string[] itemCountArray = orderRequest.ItemAmounts.Split(',');
-                string[] itemPriceArray=orderRequest.TotalPrice.Split(",");
+                string[] itemPriceArray = orderRequest.TotalPrice.Split(",");
 
                 for (int i = 0; i < itemNameArray.Length; i++)
                 {
@@ -81,27 +78,25 @@ namespace EWebCommerceAPI.Controllers
                 return NotFound();
             }
         }
-        
+
         [HttpPost]
         [Route("AddNewItem")]
         public async Task<ActionResult> AddNewItem([FromForm] NewItemRequest NIT)
         {
             if (!string.IsNullOrEmpty(NIT.itemName) && NIT.itemPrice != null)
             {
-                
+
                 Item newItem = new Item()
                 {
                     ItemName = NIT.itemName.Trim(),
                     ItemPrice = NIT.itemPrice,
-                    //install Microsoft.AspNetCore.Http.Features check NewItemRequest class for more info
-                    //ItemImage = NIT.itemImage,
                     ItemStock = NIT.itemStock,
-                    ItemPriceTag="TRY",
+                    ItemPriceTag = "TRY",
                     SellerUser = NIT.userName.Trim()
                 };
                 _CC.Items.Add(newItem);
                 _CC.SaveChanges();
-                return new JsonResult(_CC.Items.Where(x=>x.SellerUser==NIT.userName.Trim()));
+                return new JsonResult(_CC.Items.Where(x => x.SellerUser == NIT.userName.Trim()));
             }
             else
             {
@@ -116,9 +111,9 @@ namespace EWebCommerceAPI.Controllers
         }
         [HttpGet]
         [Route("GetMyOrdersByGuid")]
-        public JsonResult GetMyOrdersByGuid(string userName,string itemGuid)
+        public JsonResult GetMyOrdersByGuid(string userName, string itemGuid)
         {
-            return new JsonResult(_CC.Orders.Where(x => x.OrdererName == userName&&x.OrderGuid==itemGuid).ToList());
+            return new JsonResult(_CC.Orders.Where(x => x.OrdererName == userName && x.OrderGuid == itemGuid).ToList());
         }
         [HttpGet]
         [Route("GetMyListings")]

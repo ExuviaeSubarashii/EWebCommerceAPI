@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Commerce.Domain.Models
 {
@@ -100,6 +97,10 @@ namespace Commerce.Domain.Models
 
                 entity.Property(e => e.UserName)
                     .HasMaxLength(25)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+                entity.Property(e => e.WishList)
+                    .HasMaxLength(1000)
                     .IsUnicode(false)
                     .IsFixedLength();
             });

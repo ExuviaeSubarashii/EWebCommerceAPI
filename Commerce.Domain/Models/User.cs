@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Commerce.Domain.Models
+﻿namespace Commerce.Domain.Models
 {
     public partial class User
     {
@@ -11,5 +8,7 @@ namespace Commerce.Domain.Models
         public string? Password { get; set; }
         public string? HasPassword { get; set; }
         public DateTime? CreationDate { get; set; }
+
+        public string? WishList { get; set; }
     }
 }
