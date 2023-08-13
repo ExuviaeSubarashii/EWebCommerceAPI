@@ -56,21 +56,21 @@ namespace EWebCommerceAPI.Controllers
             }
             else if (UserWishList.WishList.Contains(wishId.ToString()))
             {
-                string[] acceptedfriendRequest = null;
+                string[] bombawishlist = null;
                 List<string> sw = new List<string>();
 
                 var query = _CC.Users.Where(x => x.UserName.Trim() == userName).FirstOrDefault();
                 var query2 = _CC.Users.Where(x => x.UserName == userName).ToList();
                 foreach (var item in query2)
                 {
-                    acceptedfriendRequest = item.WishList.Split(',');
+                    bombawishlist = item.WishList.Split(',');
                 }
 
-                List<String> list = acceptedfriendRequest.ToList();
+                List<String> list = bombawishlist.ToList();
                 list.Remove(wishId.ToString());
                 string[] columns = list.ToArray();
-                var newfriendList = string.Join(",", columns);
-                query.WishList = newfriendList;
+                var newWishList = string.Join(",", columns);
+                query.WishList = newWishList;
                 _CC.SaveChanges();
                 return Ok();
             }
